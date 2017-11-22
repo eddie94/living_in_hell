@@ -78,10 +78,14 @@ def world_map(char_list):
     red_carpet_design = red_carpet.set_design("D:\학업자료\pycharm\hell_josun\images\map\Red_carpet.gif")
     red_carpet_size = red_carpet.set_size(550,670,100,50)
 
+    object_list = [conv_store]
+
     while not stage_end:
         quit_op()
-        if not mychar.rect.colliderect(conv_store.rect):
-            move_char(world_map_floor_size,char_list[1])
+        # if not mychar.rect.colliderect(conv_store.rect):
+        #     move_char(world_map_floor_size,char_list[1])
+        mychar.move(object_list,world_map_floor_size)
+        print(mychar.rect.top, conv_store.rect.bottom)
         screen.blit(world_map_floor_design,(0,0))
         screen.blit(red_carpet_design, red_carpet.rect)
         screen.blit(conv_store_design, (0,0))
