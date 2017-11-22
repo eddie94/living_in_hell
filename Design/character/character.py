@@ -63,6 +63,92 @@ class make_char():
             elif check_bot and not(check_right and check_left and check_top):
                 self.rect = self.rect.move(stay)
 
+    def move(self,object_list,size):
+
+        pressed = pygame.key.get_pressed()
+
+        if pressed[pygame.K_UP]:
+            self.image_index = 1
+            for object in object_list:
+                in_range = self.rect.left in range(object.rect.left, object.rect.right) or \
+                           self.rect.right in range(object.rect.left, object.rect.right)
+                if not(in_range):
+                    if self.rect.top - 2 > size[1]:
+                        self.rect = self.rect.move(up)
+                    elif self.rect.top - 2 <= size[3]:
+                        self.rect.top = size[1]
+                elif in_range and self.rect.bottom <= object.rect.top:
+                    if self.rect.top - 2 > size[1]:
+                        self.rect = self.rect.move(up)
+                    elif self.rect.top - 2 <= size[3]:
+                        self.rect.top = size[1]
+                elif in_range and self.rect.top >= object.rect.bottom:
+                    if self.rect.top - 2 > object.rect.bottom:
+                        self.rect = self.rect.move(up)
+                    elif self.rect.top -2 <= object.rect.bottom:
+                        self.rect.top = object.rect.bottom
+        if pressed[pygame.K_DOWN]:
+            self.image_index = 0
+            for object in object_list:
+                in_range = self.rect.left in range(object.rect.left, object.rect.right) or \
+                           self.rect.right in range(object.rect.left, object.rect.right)
+                if not(in_range):
+                    if self.rect.bottom + 2 < size[3]:
+                        self.rect = self.rect.move(down)
+                    elif self.rect.bottom + 2 <= size[3]:
+                        self.rect.bottom = size[3]
+                elif in_range and self.rect.top >= object.rect.bottom:
+                    if self.rect.bottom + 2 < size[3]:
+                        self.rect = self.rect.move(down)
+                    elif self.rect.bottom + 2 <= size[3]:
+                        self.rect.bottom = size[3]
+                elif in_range and self.rect.bottom <= object.rect.top:
+                    if self.rect.bottom + 2 < object.rect.top:
+                        self.rect = self.rect.move(down)
+                    elif self.rect.bottom + 2 <= object.rect.top:
+                        self.rect.bottom = object.rect.top
+
+        if pressed[pygame.K_LEFT]:
+            self.image_index = 2
+            for object in object_list:
+                in_range = self.rect.top in range(object.rect.top, object.rect.bottom) or\
+                           self.rect.bottom in range(object.rect.top, object.rect.bottom)
+                if not in_range:
+                    if self.rect.left -2 > size[0]:
+                        self.rect = self.rect.move(left)
+                    elif self.rect.left -2 <= size[0]:
+                        self.rect.left = size[0]
+                elif in_range and self.rect.right <= object.rect.left:
+                    if self.rect.left -2 > size[0]:
+                        self.rect = self.rect.move(left)
+                    elif self.rect.left -2 <= size[0]:
+                        self.rect.left = size[0]
+                elif in_range and self.rect.left >= object.rect.right:
+                    if self.rect.left -2 > object.rect.right:
+                        self.rect = self.rect.move(left)
+                    elif self.rect.left -2 <= object.rect.right:
+                        self.rect.left = object.rect.right
+        if pressed[pygame.K_RIGHT]:
+            self.image_index = 3
+            for object in object_list:
+                in_range = self.rect.top in range(object.rect.top, object.rect.bottom) or\
+                           self.rect.bottom in range(object.rect.top, object.rect.bottom)
+                if not in_range:
+                    if self.rect.right + 2 < size[2]:
+                        self.rect = self.rect.move(right)
+                    elif self.rect.right + 2 >= size[2]:
+                        self.rect.right = size[2]
+                elif in_range and self.rect.left >= object.rect.right:
+                    if self.rect.right + 2 < size[2]:
+                        self.rect = self.rect.move(right)
+                    elif self.rect.right + 2 >= size[2]:
+                        self.rect.right = size[2]
+                elif in_range and self.rect.right <= object.rect.left:
+                    if self.rect.right + 2 < object.rect.left:
+                        self.rect = self.rect.move(right)
+                    elif self.rect.right + 2 >= object.rect.left:
+                        self.rect.right = object.rect.left
+
 
 class object():
 
