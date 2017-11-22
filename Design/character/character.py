@@ -9,6 +9,13 @@ make_char() 클래스의 locus(이후 궤적)는 캐릭터가 방을 이동할�
 마찬가지로 방에 들어오게 되면 첫번째 요소의 값을 덮어쓰면 된다
 '''
 
+pygame.font.init()
+
+size = width, height = 1280,720
+white = 255,255,255
+screen = pygame.display.set_mode(size)
+font = pygame.font.SysFont('Arial',40)
+
 char_size = [31,48]
 
 up = [0, -2]
@@ -21,8 +28,11 @@ class make_char():
 
     def __init__(self):
 
-        self.HP = 5
-        self.atk_rate = 0.5
+        self.money = 0
+        self.str = 0
+        self.charm = 0
+        self.int = 0
+        self.job = ''
         self.speed = 2
         self.name = ''
         self.size = [31,48]
@@ -67,87 +77,72 @@ class make_char():
 
         pressed = pygame.key.get_pressed()
 
+        money_surface = font.render("my cash : %s" % (self.money), False, (0, 0, 0))
+        str_surface = font.render("my strength : %s" % (self.str), False, (0, 0, 0))
+        charm_surface = font.render("my charm : %s" % (self.charm), False, (0, 0, 0))
+        int_surface = font.render("my intelligence : %s" % (self.int), False, (0, 0, 0))
+        job_surface = font.render("my job : %s" % (self.job), False, (0, 0, 0))
+
         if pressed[pygame.K_UP]:
             self.image_index = 1
-            for object in object_list:
-                in_range = self.rect.left in range(object.rect.left, object.rect.right) or \
-                           self.rect.right in range(object.rect.left, object.rect.right)
-                if not(in_range):
-                    if self.rect.top - 2 > size[1]:
-                        self.rect = self.rect.move(up)
-                    elif self.rect.top - 2 <= size[3]:
+            next_move = self.rect.move(up)
+            if self.rect.top > size[1]:
+                ok=[]
+                for ob in object_list:
+                    if next_move.colliderect(ob):
+                        ok.append(1)
+                    else:
+                        ok.append(0)
+                if sum(ok)==0:
+                    if next_move.top < size[1]:
                         self.rect.top = size[1]
-                elif in_range and self.rect.bottom <= object.rect.top:
-                    if self.rect.top - 2 > size[1]:
+                    else:
                         self.rect = self.rect.move(up)
-                    elif self.rect.top - 2 <= size[3]:
-                        self.rect.top = size[1]
-                elif in_range and self.rect.top >= object.rect.bottom:
-                    if self.rect.top - 2 > object.rect.bottom:
-                        self.rect = self.rect.move(up)
-                    elif self.rect.top -2 <= object.rect.bottom:
-                        self.rect.top = object.rect.bottom
         if pressed[pygame.K_DOWN]:
             self.image_index = 0
-            for object in object_list:
-                in_range = self.rect.left in range(object.rect.left, object.rect.right) or \
-                           self.rect.right in range(object.rect.left, object.rect.right)
-                if not(in_range):
-                    if self.rect.bottom + 2 < size[3]:
-                        self.rect = self.rect.move(down)
-                    elif self.rect.bottom + 2 <= size[3]:
+            next_move = self.rect.move(down)
+            if self.rect.bottom < size[3]:
+                ok=[]
+                for ob in object_list:
+                    if next_move.colliderect(ob):
+                        ok.append(1)
+                    else:
+                        ok.append(0)
+                if sum(ok)==0:
+                    if next_move.bottom > size[3]:
                         self.rect.bottom = size[3]
-                elif in_range and self.rect.top >= object.rect.bottom:
-                    if self.rect.bottom + 2 < size[3]:
+                    else:
                         self.rect = self.rect.move(down)
-                    elif self.rect.bottom + 2 <= size[3]:
-                        self.rect.bottom = size[3]
-                elif in_range and self.rect.bottom <= object.rect.top:
-                    if self.rect.bottom + 2 < object.rect.top:
-                        self.rect = self.rect.move(down)
-                    elif self.rect.bottom + 2 <= object.rect.top:
-                        self.rect.bottom = object.rect.top
-
         if pressed[pygame.K_LEFT]:
             self.image_index = 2
-            for object in object_list:
-                in_range = self.rect.top in range(object.rect.top, object.rect.bottom) or\
-                           self.rect.bottom in range(object.rect.top, object.rect.bottom)
-                if not in_range:
-                    if self.rect.left -2 > size[0]:
-                        self.rect = self.rect.move(left)
-                    elif self.rect.left -2 <= size[0]:
+            next_move = self.rect.move(left)
+            if self.rect.left > size[0]:
+                ok=[]
+                for ob in object_list:
+                    if next_move.colliderect(ob):
+                        ok.append(1)
+                    else:
+                        ok.append(0)
+                if sum(ok)==0:
+                    if next_move.left < size[0]:
                         self.rect.left = size[0]
-                elif in_range and self.rect.right <= object.rect.left:
-                    if self.rect.left -2 > size[0]:
+                    else:
                         self.rect = self.rect.move(left)
-                    elif self.rect.left -2 <= size[0]:
-                        self.rect.left = size[0]
-                elif in_range and self.rect.left >= object.rect.right:
-                    if self.rect.left -2 > object.rect.right:
-                        self.rect = self.rect.move(left)
-                    elif self.rect.left -2 <= object.rect.right:
-                        self.rect.left = object.rect.right
         if pressed[pygame.K_RIGHT]:
             self.image_index = 3
-            for object in object_list:
-                in_range = self.rect.top in range(object.rect.top, object.rect.bottom) or\
-                           self.rect.bottom in range(object.rect.top, object.rect.bottom)
-                if not in_range:
-                    if self.rect.right + 2 < size[2]:
-                        self.rect = self.rect.move(right)
-                    elif self.rect.right + 2 >= size[2]:
+            next_move = self.rect.move(right)
+            if self.rect.right < size[2]:
+                ok=[]
+                for ob in object_list:
+                    if next_move.colliderect(ob):
+                        ok.append(1)
+                    else:
+                        ok.append(0)
+                if sum(ok)==0:
+                    if next_move.right > size[2]:
                         self.rect.right = size[2]
-                elif in_range and self.rect.left >= object.rect.right:
-                    if self.rect.right + 2 < size[2]:
+                    else:
                         self.rect = self.rect.move(right)
-                    elif self.rect.right + 2 >= size[2]:
-                        self.rect.right = size[2]
-                elif in_range and self.rect.right <= object.rect.left:
-                    if self.rect.right + 2 < object.rect.left:
-                        self.rect = self.rect.move(right)
-                    elif self.rect.right + 2 >= object.rect.left:
-                        self.rect.right = object.rect.left
 
 
 class object():
