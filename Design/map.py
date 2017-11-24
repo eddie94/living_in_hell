@@ -84,19 +84,27 @@ def world_map(char_list):
 
     object_list = [nogada,conv_store]
 
+    money_surface = font.render("my cash : %s" % (mychar.money), False, (0, 0, 0))
+    str_surface = font.render("my strength : %s" % (mychar.str), False, (0, 0, 0))
+    charm_surface = font.render("my charm : %s" % (mychar.charm), False, (0, 0, 0))
+    int_surface = font.render("my intelligence : %s" % (mychar.int), False, (0, 0, 0))
+    job_surface = font.render("my job : %s" % (mychar.job), False, (0, 0, 0))
+
+
     while not stage_end:
+        pressed = pygame.key.get_pressed()
         quit_op()
-        # if not mychar.rect.colliderect(conv_store.rect):
-        #     move_char(world_map_floor_size,char_list[1])
+
         mychar.move(object_list,world_map_floor_size)
-        print(mychar.rect)
-        #print(mychar.rect.left in range(nogada.rect.left, nogada.rect.right) or mychar.rect.right in range(nogada.rect.left, nogada.rect.right))
-        #print(conv_store.rect, nogada.rect)
+
+        #print(mychar.rect)
+
         screen.blit(world_map_floor_design,(0,0))
         screen.blit(red_carpet_design, red_carpet.rect)
         screen.blit(conv_store_design, (0,0))
         screen.blit(conv_store_carpet_design,(315,312))
         screen.blit(nogada_design, nogada.rect)
+        screen.blit(nogada_door_design, nogada_door.rect)
         screen.blit(char_list[0][mychar.image_index], mychar.rect)
         pygame.display.flip()
 
@@ -108,6 +116,9 @@ def world_map(char_list):
             stage_end = True
         if mychar.rect.right == 1280:
             mychar.locus = [1,3,0]
+            stage_end = True
+        if mychar.rect.top == 320 and mychar.rect.left in range(734,821):
+            mychar.locus = [1,4,0]
             stage_end = True
 
 
@@ -142,13 +153,74 @@ def store(char_list):
         screen.blit(char_list[0][mychar.image_index],mychar.rect)
         pygame.display.flip()
 
-def world_map2():
+def world_map2(char_list):
     '''
     world_map map_id = 3
     :return:
     '''
-    pass
+    mychar = char_list[1]
+    stage_end = False
 
+    while not stage_end:
+
+        quit_op()
+
+        object_list = [fake_object]
+
+        mychar.move(object_list, world_map_floor_size)
+
+        if mychar.rect.left == 0:
+            mychar.locus = [3,1,0]
+            stage_end = True
+
+        screen.blit(world_map_floor_design, world_map_floor.rect)
+        screen.blit(char_list[0][mychar.image_index], mychar.rect)
+        pygame.display.flip()
+
+
+def nogada_map(char_list):
+
+    '''
+    map_id = 4
+    :return:
+    '''
+
+    mychar = char_list[1]
+    stage_end = False
+
+    while not stage_end:
+        quit_op()
+        object_list = [stone]
+        pressed = pygame.key.get_pressed()
+
+        # if pressed[pygame.K_SPACE]:
+        #     mychar.money += 40
+
+        if mychar.rect.top == 350 and mychar.rect.right in range(513,815):
+            if pressed[pygame.K_SPACE]:
+                mychar.money += 4
+
+        mychar.move(object_list, nogada_floor_size)
+        print(mychar.rect.top, mychar.rect.right)
+
+        if mychar.rect.bottom == 660 and mychar.rect.right in range(371,440):
+            mychar.locus = [4,1,0]
+            stage_end = True
+
+        # if mychar.rect.top == 398 and mychar.rect.right in range(513,815):
+        #     print("0")
+        #     for ev in pygame.event.get(pygame.KEYDOWN):
+        #         if ev.key == pygame.K_SPACE:
+        #             print("1")
+        #             mychar.money += 4000
+
+        screen.fill(black)
+        screen.blit(nogada_floor_design, nogada_floor.rect)
+        screen.blit(nogada_carpet_design, nogada_carpet.rect)
+        screen.blit(stone_design, stone.rect)
+        screen.blit(nogada_explain_design, nogada_explain_rect)
+        screen.blit(char_list[0][mychar.image_index], mychar.rect)
+        pygame.display.flip()
 
 def move_rooms(char_list):
 
@@ -179,4 +251,15 @@ def move_rooms(char_list):
         world_map(char_list)
     elif previous_map_id == 1 and next_map_id == 3:
         char_list[1].rect.left = 0
+        world_map2(char_list)
+    elif previous_map_id == 3 and next_map_id == 1:
+        char_list[1].rect.right = 1270
+        world_map(char_list)
+    elif previous_map_id == 1 and next_map_id == 4:
+        char_list[1].rect.bottom = 636
+        char_list[1].rect.right = 403
+        nogada_map(char_list)
+    elif previous_map_id == 4 and next_map_id == 1:
+        char_list[1].rect.top = 330
+        char_list[1].rect.left = 760
         world_map(char_list)
