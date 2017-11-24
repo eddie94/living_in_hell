@@ -3,6 +3,7 @@ from Design.character.character import *
 from sub_func import *
 from in_game.afios import *
 from execution import *
+from Design.effect import *
 
 room_floor = object()
 room_floor_design=room_floor.set_design("D:\학업자료\pycharm\hell_josun\images\map\Room_floor.jpg")
@@ -22,6 +23,7 @@ world map = 1
 conv_store = 2
 world map 2 = 3
 nogada = 4
+gym = 5
 '''
 
 def stage1(char_list):              #remember char_list[0] is image_list
@@ -82,7 +84,7 @@ def world_map(char_list):
     red_carpet_design = red_carpet.set_design("D:\학업자료\pycharm\hell_josun\images\map\Red_carpet.gif")
     red_carpet_size = red_carpet.set_size(550,670,100,50)
 
-    object_list = [nogada,conv_store]
+    object_list = [nogada,conv_store,gym]
 
     money_surface = font.render("my cash : %s" % (mychar.money), False, (0, 0, 0))
     str_surface = font.render("my strength : %s" % (mychar.str), False, (0, 0, 0))
@@ -97,7 +99,7 @@ def world_map(char_list):
 
         mychar.move(object_list,world_map_floor_size)
 
-        #print(mychar.rect)
+        print(mychar.rect.top, mychar.rect.left)
 
         screen.blit(world_map_floor_design,(0,0))
         screen.blit(red_carpet_design, red_carpet.rect)
@@ -105,6 +107,7 @@ def world_map(char_list):
         screen.blit(conv_store_carpet_design,(315,312))
         screen.blit(nogada_design, nogada.rect)
         screen.blit(nogada_door_design, nogada_door.rect)
+        screen.blit(gym_design, gym.rect)
         screen.blit(char_list[0][mychar.image_index], mychar.rect)
         pygame.display.flip()
 
@@ -119,6 +122,9 @@ def world_map(char_list):
             stage_end = True
         if mychar.rect.top == 320 and mychar.rect.left in range(734,821):
             mychar.locus = [1,4,0]
+            stage_end = True
+        if mychar.rect.top == 300 and mychar.rect.left in range(1060,1156):
+            mychar.locus = [1,5,0]
             stage_end = True
 
 
@@ -198,7 +204,9 @@ def nogada_map(char_list):
 
         if mychar.rect.top == 350 and mychar.rect.right in range(513,815):
             if pressed[pygame.K_SPACE]:
-                mychar.money += 4
+                nogada_effect(mychar)
+                mychar.money += 40
+                mychar.str += 2
 
         mychar.move(object_list, nogada_floor_size)
         print(mychar.rect.top, mychar.rect.right)
@@ -221,6 +229,23 @@ def nogada_map(char_list):
         screen.blit(nogada_explain_design, nogada_explain_rect)
         screen.blit(char_list[0][mychar.image_index], mychar.rect)
         pygame.display.flip()
+
+def gym_map(char_list):
+    '''
+
+    map_id : 5
+    '''
+    # stage_end = False
+    #
+    # while not stage_end:
+    #     quit_op()
+
+    mychar = char_list[1]
+    stage_end = False
+
+    pass
+
+
 
 def move_rooms(char_list):
 
@@ -262,4 +287,12 @@ def move_rooms(char_list):
     elif previous_map_id == 4 and next_map_id == 1:
         char_list[1].rect.top = 330
         char_list[1].rect.left = 760
+        world_map(char_list)
+    elif previous_map_id == 1 and next_map_id == 5:
+        char_list[1].rect.top = 600
+        char_list[1].rect.left = 600
+        gym_map(char_list)
+    elif previous_map_id == 5 and next_map_id == 1:
+        char_list[1].rect.top = 320
+        char_list[1].rect.left = 1100
         world_map(char_list)
