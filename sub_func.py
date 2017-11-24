@@ -54,50 +54,6 @@ def move_char(size,char):
         else:
             pass
 
-# def move_char(char, size):  # size는 width, height로 구성된 리스트
-
-    # up=[0,-char.speed]
-    # down=[0,char.speed]
-    # right=[char.speed,0]
-    # left=[-char.speed,0]
-    #
-    # pressed = pygame.key.get_pressed()
-    #
-    # if pressed[pygame.K_UP]:
-    #     if char.pos[1] + up[1] > size[1]:
-    #         char.pos[1] += up[1]
-    #     elif char.pos[1] + up[1] < size[3]:
-    #         char.pos[1] = size[1]
-    #     else:
-    #         pass
-    #     char.image_index = 1
-    # if pressed[pygame.K_DOWN]:
-    #     if char.pos[1] + char.size[1] + down[1] <= size[3]:
-    #         char.pos[1] += down[1]
-    #     elif char.pos[1] + char.size[1] + down[1] > size[3]:
-    #         char.pos[1] = size[3] - char.size[1]
-    #     else:
-    #         pass
-    #     char.image_index = 0
-    # if pressed[pygame.K_RIGHT]:
-    #     if char.pos[0] + char.size[0] + right[0] <= size[2]:
-    #         char.pos[0] += right[0]
-    #     elif char.pos[0] + char.size[0] + right[0] > size[1]:
-    #         char.pos[0] = size[2] - char.size[0]
-    #     else:
-    #         pass
-    #     char.image_index = 3
-    # if pressed[pygame.K_LEFT]:
-    #     if char.pos[0] + left[0] > size[0]:
-    #         char.pos[0] += left[0]
-    #     elif char.pos[0] + left[0] < size[0]:
-    #         char.pos[0] = size[0]
-    #     else:
-    #         pass
-    #     char.image_index = 2
-
-
-
 def blit_alpha(target, source, location, opacity):
 
     x = location[0]
@@ -120,21 +76,23 @@ def get_char(name):
         mychar = afios
         return mychar
 
-def collision_range(size):
-    '''
-    size is a list that contains the axis of the obstacle
-    '''
 
-    x_range = range(size[0],size[2])
-    y_range = range(size[1],size[3])
+def info(char):
 
-    return [x_range,y_range]
+    info_end = True
 
-def collision_check(char_rect, object):
-    '''
-    check if the character's position is in the range of an obstacle
-    '''
-    if char_rect.colliderect(object):
-        return True
-    else:
-        return False
+    money_surface = font.render("my cash : %s" %(char.money), False, (0,0,0))
+    str_surface = font.render("my strength : %s" %(char.str), False, (0,0,0))
+    charm_surface = font.render("my charm : %s" %(char.charm), False, (0,0,0))
+    int_surface = font.render("my intelligence : %s" %(char.int), False, (0,0,0))
+    job_surface = font.render("my job : %s" %(char.job), False, (0,0,0))
+
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_i:
+                while not info_end:
+                    if event.type == pygame.KEYDOWN:
+                        info_end = True
+                    pygame.draw.rect(screen, white, (490,210,300,300), 5)
+                    screen.blit(money_surface, (520, 220))
+                    pygame.display.flip()
