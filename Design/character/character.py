@@ -82,6 +82,7 @@ class make_char():
         charm_surface = font.render("my charm : %s" % (self.charm), False, (0, 0, 0))
         int_surface = font.render("my intelligence : %s" % (self.int), False, (0, 0, 0))
         job_surface = font.render("my job : %s" % (self.job), False, (0, 0, 0))
+        info_surface = pygame.Surface((400,400))
 
         if pressed[pygame.K_UP]:
             self.image_index = 1
@@ -143,6 +144,20 @@ class make_char():
                         self.rect.right = size[2]
                     else:
                         self.rect = self.rect.move(right)
+        if pressed[pygame.K_i]:
+            end = False
+            while not end:
+                for ev in pygame.event.get(pygame.KEYDOWN):
+                    if ev.key == pygame.K_ESCAPE:
+                        end = True
+                info_surface.fill(white)
+                screen.blit(info_surface,(440,160))
+                screen.blit(money_surface, (440,180))
+                screen.blit(str_surface, (440,240))
+                screen.blit(int_surface, (440,300))
+                screen.blit(charm_surface, (440, 360))
+                screen.blit(job_surface, (440,420))
+                pygame.display.flip()
 
 
 class object():
