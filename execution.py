@@ -47,3 +47,7 @@ stone_size = stone.set_size(500,50,300,300)
 nogada_explain = pygame.Surface([524,77])
 nogada_explain_design = pygame.image.load("D:\학업자료\pycharm\hell_josun\images\map\노가다\설명.jpg")
 nogada_explain_rect = nogada_explain_design.get_rect(top=0, left=378)
+
+gym = object()
+gym_design = gym.set_design("D:\학업자료\pycharm\hell_josun\images\map\헬스장\헬스장.jpg")
+gym_size = gym.set_size(920,0,400,300)
